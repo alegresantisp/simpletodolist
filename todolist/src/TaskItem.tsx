@@ -22,11 +22,14 @@ export function TaskItem({ task }: TaskItemProps) {
     setNodeRef,
     transform,
     transition,
+    isDragging,
   } = useSortable({ id: task.id });
 
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    zIndex: isDragging ? 1000 : 1,
+    opacity: isDragging ? 0.8 : 1,
   };
 
   return (
@@ -39,6 +42,8 @@ export function TaskItem({ task }: TaskItemProps) {
         p-3 cursor-move border
         transition-colors duration-200
         ${statusColors[task.status]}
+        ${isDragging ? 'shadow-lg' : ''}
+        touch-none
       `}
     >
       <p className="text-sm text-purple-50">{task.content}</p>

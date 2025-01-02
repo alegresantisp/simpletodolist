@@ -4,13 +4,12 @@ import React, { useState } from 'react';
 import { 
   DndContext, 
   DragEndEvent,
-  DragOverlay,
-  PointerSensor,
+  TouchSensor,
+  MouseSensor,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
-import styled from 'styled-components';
 import { Task, Column as ColumnType } from './types';
 import { Card } from "@/components/ui/card"
 import { CreateTaskForm } from './CreateTaskForm';
@@ -36,7 +35,12 @@ const initialColumns: ColumnType[] = [
 
 export default function Dashboard() {
   const [columns, setColumns] = useState<ColumnType[]>(initialColumns);
-  const sensors = useSensors(useSensor(PointerSensor));
+  
+  // Use both MouseSensor and TouchSensor
+  const sensors = useSensors(
+    useSensor(MouseSensor),
+    useSensor(TouchSensor)
+  );
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -88,17 +92,17 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-8">
-      <Card className="max-w-6xl mx-auto bg-black/20 backdrop-blur-sm p-6 rounded-xl border-purple-500/20">
-        <h1 className="text-4xl font-bold text-center mb-8 text-purple-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 p-4 sm:p-8">
+      <Card className="max-w-6xl mx-auto bg-black/20 backdrop-blur-sm p-4 sm:p-6 rounded-xl border-purple-500/20">
+        <h1 className="text-3xl sm:text-4xl font-bold text-center mb-6 sm:mb-8 text-purple-100">
           Dashboard de Tareas
         </h1>
         
         <CreateTaskForm onAddTask={addTask} />
 
-        <div className="mt-8">
+        <div className="mt-6 sm:mt-8">
           <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {columns.map((column) => (
                 <Column
                   key={column.id}
